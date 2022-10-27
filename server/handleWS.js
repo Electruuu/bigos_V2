@@ -1,8 +1,8 @@
-import ws from 'ws'
-import config from '../config.json'
+import { WebSocketServer } from 'ws'
+import config from '../config.js'
 
 export default function handleWS() {
-    const wss = new ws.Server({port: config.prod.ws})
+    const wss = new WebSocketServer({port: config.prod.ws})
 
     wss.on('connection', (ws) => {
 
