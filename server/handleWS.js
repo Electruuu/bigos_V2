@@ -7,10 +7,12 @@ export default function handleWS() {
     wss.on('connection', (ws) => {
 
         console.log("Connection established");
+        console.log(wss.clients)
 
-        ws.send(encode({
-            type:"handshake",
-        }))
+        //TODO: this vvv
+        // registerUser()
+
+        // addHeartBeat()
 
         ws.on('message', (message) => {
 

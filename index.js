@@ -1,13 +1,16 @@
-import serverClient from "./server/serveClient.js";
+import serveClient from "./server/serveClient.js";
 import express from "express"
 import handleWS from "./server/handleWS.js";
+import config from "./config.js";
 
 //express.js setup
 global.app = express()
 
-serverClient()
+//launch systems
+serveClient()
 handleWS()
 
-global.app.listen(3000, () => {
-    console.log(`Bigos się gotuje na porcie 3000`)
+//set express.js listening port
+global.app.listen(config.prod.http, () => {
+    console.log(`Bigos się gotuje na http://127.0.0.1:${config.prod.http}`)
 })
