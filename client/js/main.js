@@ -11,7 +11,7 @@ const socket = new WebSocket('ws://localhost:8081');
 
 // Connection opened
 socket.addEventListener('open', (event) => {
-    socket.send('Hello Server!');
+    socket.send({val:0,params:'Hello Server!'});
 });
 
 socket.addEventListener('message', (event) => {
@@ -25,19 +25,9 @@ window.camera.x = 0
 window.camera.y = 0
 
 let player2 = new Sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png','gracz.png']})
-/*
-player2.removeTexture(0)
 
-let playerTemp = new Sprite({x: 10, y: 30, color: 'red'})
 
-class player {
-    constructor(id = -1) {
-        
-    }
-}
 
-//var newPlayer1 = new player()
-*/
 document.addEventListener('drawTick', () => {
     player2.setX(document.getElementById('playerX').value)
     window.camera.x = Number(document.getElementById('cameraX').value)

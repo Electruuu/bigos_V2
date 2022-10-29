@@ -17,7 +17,9 @@ export default function handleWS() {
         // addHeartBeat()
 
         ws.on('message', (message) => {
-            ws.send('uwu')
+            console.log(message)
+            console.log(data.decode(message))
+            ws.send(data.decode(message))
             /*if (data.addPlayer(message)==0) {
             } else {
                 data.addPlayer(-1)
