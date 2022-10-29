@@ -74,22 +74,4 @@ export default class db {
 
         return this.defplayer;
     }
-    /**
-     * Decodes Value into Actions:
-     * 1 - Check ID List for id (params Must Include 'id:'). 
-     * @param {int} val - Value to Decode.
-     * @param {*} params - Additionals Params. (Depends on val).
-     */
-    decode(val, params={}) {
-        switch (val) {
-            case 0:
-                return params;
-            case 1: 
-                if (this.getPlayer(params.id).id==-1) {
-                    return {val:-1, params:{id:params.id}};
-                } else {
-                    return {val:-1, params:{id:this.nextID()}};
-                }
-        }
-    }
 }

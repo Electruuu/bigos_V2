@@ -1,11 +1,12 @@
 import { WebSocketServer } from 'ws'
 import config from '../config.js'
 import db from './db.js'
+import incoming from './incoming.js'
 
 export default function handleWS() {
     const wss = new WebSocketServer({port: config.prod.ws})
 
-    const data = new db()
+    global.data = new db()
     
     wss.on('connection', (ws) => {
 
@@ -16,15 +17,7 @@ export default function handleWS() {
      
         // addHeartBeat()
 
-        ws.on('message', (message) => {
-            console.log(message)
-            console.log(data.decode(message))
-            ws.send(data.decode(message))
-            /*if (data.addPlayer(message)==0) {
-            } else {
-                data.addPlayer(-1)
-            }*/// registerUser() Partaily done  
-        })
+        ws.on('message', (msg) => {incoming(msg, ws)})
         
     })
 }
