@@ -1,8 +1,9 @@
-import sprite from "./classes/sprite.js"
+//import Camera from "./classes/camera.js"; // doesn't exist, don't even try to import
+import Sprite from "./classes/sprite.js"
 import frameLoop from "./frameLoop.js"
+import initCanvas from "./initCanvas.js"
 
-window.canvas = document.getElementById('main')
-window.ctx = window.canvas.getContext('2d')
+initCanvas()
 
 const socket = new WebSocket('ws://localhost:8081');
 // Listen for messages
@@ -17,12 +18,17 @@ socket.addEventListener('message', (event) => {
     console.log('Message from server ', event.data);
 });
 
+//let camera = new Camera({x: 0, y: 0})
+//camera: bieda edition vvv
+window.camera = {}
+window.camera.x = 0
+window.camera.y = 0
 
-let player2 = new sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png']})
+let player2 = new Sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png','gracz.png']})
 /*
 player2.removeTexture(0)
 
-let playerTemp = new sprite({x: 10, y: 30, color: 'red'})
+let playerTemp = new Sprite({x: 10, y: 30, color: 'red'})
 
 class player {
     constructor(id = -1) {
@@ -33,7 +39,8 @@ class player {
 //var newPlayer1 = new player()
 */
 document.addEventListener('drawTick', () => {
-    player2.x = document.getElementById('x').value
+    player2.setX(document.getElementById('playerX').value)
+    window.camera.x = Number(document.getElementById('cameraX').value)
 })
 
 frameLoop()
