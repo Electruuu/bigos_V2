@@ -49,6 +49,7 @@ export default class db {
                     add: '...'
                 }
             };
+            this.reservations.splice(this.reservations.indexOf(id),1)
             return 1;
         }
         if (id!=-1) {
@@ -88,9 +89,9 @@ export default class db {
         for (let i in this.players) {
             temp[temp.length] = this.players[i].id;
         }
-        let s = 0;
         for (let s = 0;;s++) {
-            if (!(temp.includes(s) && this.reservations.includes(s))) {    
+            if (!temp.includes(s) && !this.reservations.includes(s)) {   
+                this.reserveID(s) 
                 return s;
             }
         }
@@ -115,7 +116,7 @@ export default class db {
      * @returns Exit Code.
      */
     reserveID(id) {
-        if (this.getPlayer(id)==-1 && !this.reservations.includes(id)) {
+        if (this.getPlayer(id).id==-1 && !this.reservations.includes(id)) {
             this.reservations[this.reservations.length] = id
             return 0;
         }

@@ -10,7 +10,6 @@ export default function incoming (msg, ws) {
             break
         case 'idver': 
             if (global.data.getPlayer(msg.params.id).id==-1 && msg.params.id != -1) {
-                global.data.reserveID(msg.params.id)
                 ws.send(JSON.stringify({
                     type:'ridver',
                     params:{
@@ -20,7 +19,7 @@ export default function incoming (msg, ws) {
                 }));
             } else {
                 let nextID = global.data.nextID();
-                global.data.reserveID(nextID)
+                let i =0
                 ws.send(JSON.stringify({
                     type:'ridver',
                     params:{

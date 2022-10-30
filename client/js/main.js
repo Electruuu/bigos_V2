@@ -1,4 +1,4 @@
-//import Camera from "./classes/camera.js"; // doesn't exist, don't even try to import
+import Camera from "./classes/camera.js";
 import Sprite from "./classes/sprite.js"
 import frameLoop from "./frameLoop.js"
 import initCanvas from "./initCanvas.js"
@@ -20,18 +20,18 @@ socket.addEventListener('open', (event) => {
 
     socket.send(JSON.stringify({type:"test",params:'Hello Server!'}));
 
-    //let camera = new Camera({x: 0, y: 0})
-    //camera: bieda edition vvv
-    window.camera = {}
-    window.camera.x = 0
-    window.camera.y = 0
+    let camera = new Camera({x: 0, y: 0})
 
     let player2 = new Sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png','Player_Face_32x32.png']})
 
+    camera.follow(player2)
+
     document.addEventListener('drawTick', () => {
+        //console.log(`pl: ${player2.x}/${player2.y}, cam: ${window.camera.x}/${window.camera.y}`)
+
         player2.setX(document.getElementById('playerX').value)
-        player1.moveTo(document.getElementById('playerX').value,0)
-        window.camera.x = Number(document.getElementById('cameraX').value)
+        //player1.moveTo(document.getElementById('playerX').value,0)
+        //camera.setX(Number(document.getElementById('cameraX').value))
     })
 });
 

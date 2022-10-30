@@ -8,6 +8,14 @@ export default class Camera {
         window.camera.x = params.x
         window.camera.y = params.y
         window.camera.scale = params.scale
+
+        document.addEventListener('drawTick', () => {this.draw()})
+    }
+    draw() {
+        if (window.camera.following) {
+            window.camera.x = window.camera.following.getCoords().x-50
+            window.camera.y = window.camera.following.getCoords().y-50
+        }
     }
     setCoords(x,y) {
         window.camera.x = x
@@ -18,5 +26,8 @@ export default class Camera {
     }
     setY(y) {
         window.camera.y = y
+    }
+    follow(obj) {
+        window.camera.following = obj
     }
 }

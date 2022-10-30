@@ -10,25 +10,26 @@ export default class Player {
      */
     constructor(id=-1, socket=0, x=0, y=0) {
         const cThis = this
-        let tid = 0;
+        this.tid = 0;
         let temp = new Date()
-        tid = ((temp.getTime()-(temp.getTime()/(10**9))%2)*(10**15))%(10**8)
+        this.tid = ((temp.getTime()-(temp.getTime()/(10**9))%2)*(10**15))%(10**8)
         if (socket instanceof WebSocket) {
-            socket.send(JSON.stringify({type:'idver',params:{id:id, tid:tid}}))
+            socket.send(JSON.stringify({type:'idver',params:{id:id, tid:this.tid}}))
             id = -2
             function verifyID(event) {
                 let msg = JSON.parse(event.data.toString())
-                if (msg.type=='ridver' && cThis.me.id==-2) {
+                if (msg.type=='ridver' && cThis.me.id==-2 && cThis.tid == msg.params.tid) {
                     cThis.me.id = msg.params.id
                     socket.send(JSON.stringify({
                         type:'adply',
                         params:{
-                            
+                            id:msg.params.id
                         } 
                     }))
                 }
+                socket.send(JSON.stringify({type:'test'}))
                 console.log(cThis.me.id, msg)
-                socket.removeEventListener("message",verifyID)
+                socket.removeEventListener("messege", verifyID)
             }
             socket.addEventListener("message", verifyID)
         }

@@ -13,4 +13,10 @@ export default class Object {
     setY(y) {
         this.y = window.canvas.height*y/100
     }
+    getCoords() {
+        return {
+            x: this.x/window.canvas.width*100,
+            y: this.y/window.canvas.height*100
+        }
+    }
 }
