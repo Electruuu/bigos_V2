@@ -1,0 +1,6 @@
+types of msgs:
+(if client/server should respond to msg type's changes to "r{type}")
+test - used only for tests
+idver - veryfication is given ID avalible
+pass - passsing the message through medium (!!!możesz tego użyć do heartbeat()!!!) 
+adply - registers new player

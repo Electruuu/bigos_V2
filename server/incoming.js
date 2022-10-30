@@ -9,10 +9,25 @@ export default function incoming (msg, ws) {
             ws.send(JSON.stringify({type:'rpass', params:msg.params}));
             break
         case 'idver': 
-            if (global.data.getPlayer(msg.params.id).id==-1) {
-                ws.send(JSON.stringify({type:'ridver', params:{id:msg.params.id}}));
+            if (global.data.getPlayer(msg.params.id).id==-1 && msg.params.id != -1) {
+                global.data.reserveID(msg.params.id)
+                ws.send(JSON.stringify({
+                    type:'ridver',
+                    params:{
+                        id:msg.params.id,
+                        tid:msg.params.tid
+                    }
+                }));
             } else {
-                ws.send(JSON.stringify({type:'ridver', params:{id:global.data.nextID()}}));
+                let nextID = global.data.nextID();
+                global.data.reserveID(nextID)
+                ws.send(JSON.stringify({
+                    type:'ridver',
+                    params:{
+                        id:nextID,
+                        tid:msg.params.tid
+                    }
+                }));
             }
             break
         case 'adply':

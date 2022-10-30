@@ -26,7 +26,7 @@ socket.addEventListener('open', (event) => {
     window.camera.x = 0
     window.camera.y = 0
 
-    let player2 = new Sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png','gracz.png']})
+    let player2 = new Sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png','Player_Face_32x32.png']})
 
     document.addEventListener('drawTick', () => {
         player2.setX(document.getElementById('playerX').value)

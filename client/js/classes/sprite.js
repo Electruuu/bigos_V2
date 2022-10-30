@@ -25,12 +25,18 @@ export default class Sprite extends Object {
             this.textures[i].src = `/img/${textures[i]}`
         }
     }
+    /**
+     * Removes Texture with given ID.
+     * @param {*} id - ID of Texture to remove.
+     */
     removeTexture(id) {
         this.textures.splice(id, 1)
     }
 
     draw() {
         //w main.js przypisałem canvas i ctx do window, które jest globalne.
-        window.ctx.drawImage(this.textures[0], this.x-window.camera.x, this.y-window.camera.y)
+        for (let i in this.textures) {
+            window.ctx.drawImage(this.textures[i], this.x-window.camera.x, this.y-window.camera.y)
+        }
     }
 }

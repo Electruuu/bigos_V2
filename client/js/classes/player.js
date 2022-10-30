@@ -2,7 +2,7 @@ import Sprite from "./sprite.js"
 
 export default class Player {
     /**
-     * Class Player Extending Class db and Class sprite .
+     * Class Player Extending Class db and Class sprite.
      * @param {*} id - Player's ID. Default: -1(new ID)
      * @param {WebSocket} socket - WebSocket to Verify is the ID Correct. (Optional).
      * @param {*} x - Player Position X. Default: 0
@@ -10,15 +10,24 @@ export default class Player {
      */
     constructor(id=-1, socket=0, x=0, y=0) {
         const cThis = this
+        let tid = 0;
+        let temp = new Date()
+        tid = ((temp.getTime()-(temp.getTime()/(10**9))%2)*(10**15))%(10**8)
         if (socket instanceof WebSocket) {
-            socket.send(JSON.stringify({type:'idver',params:{id:id}}))
+            socket.send(JSON.stringify({type:'idver',params:{id:id, tid:tid}}))
             id = -2
             function verifyID(event) {
-                let mes = event
-                if (mes.type=='ridver' && this.me.id==-2) {
-                    cThis.me.id = mes.params.id
+                let msg = JSON.parse(event.data.toString())
+                if (msg.type=='ridver' && cThis.me.id==-2) {
+                    cThis.me.id = msg.params.id
+                    socket.send(JSON.stringify({
+                        type:'adply',
+                        params:{
+                            
+                        } 
+                    }))
                 }
-                console.log(cThis.me.id)
+                console.log(cThis.me.id, msg)
                 socket.removeEventListener("message",verifyID)
             }
             socket.addEventListener("message", verifyID)
@@ -29,10 +38,19 @@ export default class Player {
             data:{
                 pos:{x:x,y:y},
                 hp:5,
+                speed: 1,
                 add:'...'
             }
         }
-        this.sprite = new Sprite({x:this.me.data.pos.x, y:this.me.data.pos.y, textures: ['5Hp_Blue_32x32.png']})
+        this.sprite = new Sprite({x:this.me.data.pos.x, y:this.me.data.pos.y, textures: [
+            '5Hp_Blue_32x32.png',
+            'Player_Face_32x32.png',
+            'Player_Bottom_32x32.png',
+            'Player_Up_32x32.png',
+            'Player_Left_32x32.png',
+            'Player_Right_32x32.png',
+            'Player_Corners_32x32.png'
+        ]})
     }
     /**
      * Set Player Posiotion to x, y.
