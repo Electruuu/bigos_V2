@@ -4,3 +4,5 @@ test - used only for tests
 idver - veryfication is given ID avalible
 pass - passsing the message through medium (!!!możesz tego użyć do heartbeat()!!!) 
 adply - registers new player
+move - ask to change your position
+getply - send array with players

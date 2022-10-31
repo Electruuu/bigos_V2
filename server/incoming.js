@@ -30,7 +30,21 @@ export default function incoming (msg, ws) {
             }
             break
         case 'adply':
-            global.data.addPlayer(msg.params.id)
+            if (global.data.addPlayer(msg.params.id, msg.params.pos.x, msg.params.pos.y) != -1) {
+                ws.send(JSON.stringify({
+                    type:'radply',
+                    params:{
+                        id:msg.params.id,
+                        pos:{x:msg.params.pos.x,y:msg.params.pos.y}
+                    }
+                }))
+                console.log('uwu')
+            }
             break
+        case 'getply':
+            ws.send(JSON.stringify({
+                type:'rgetply',
+                params:global.data.players
+            }))        
     }
 }

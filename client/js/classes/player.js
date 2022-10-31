@@ -1,4 +1,5 @@
 import Sprite from "./sprite.js"
+import Camera from "./camera.js";
 
 export default class Player {
     /**
@@ -6,9 +7,10 @@ export default class Player {
      * @param {*} id - Player's ID. Default: -1(new ID)
      * @param {WebSocket} socket - WebSocket to Verify is the ID Correct. (Optional).
      * @param {*} x - Player Position X. Default: 0
-     * @param {*} y - Player Position Y. Default: 0
+     * @param {*} y - Player Position Y. Default: 0 
+     * @param {boolean} ghost - Advised Not to Change, Determines Whether It is Player or After-Image.
      */
-    constructor(id=-1, socket=0, x=0, y=0) {
+    constructor(id=-1, socket=0, x=0, y=0, ghost=false) {
         const cThis = this
         this.tid = 0;
         let temp = new Date()
@@ -23,12 +25,11 @@ export default class Player {
                     socket.send(JSON.stringify({
                         type:'adply',
                         params:{
-                            id:msg.params.id
+                            id:msg.params.id,
+                            pos:{x:x,y:y}
                         } 
                     }))
                 }
-                socket.send(JSON.stringify({type:'test'}))
-                console.log(cThis.me.id, msg)
                 socket.removeEventListener("messege", verifyID)
             }
             socket.addEventListener("message", verifyID)
@@ -52,6 +53,10 @@ export default class Player {
             'Player_Right_32x32.png',
             'Player_Corners_32x32.png'
         ]})
+        if (!ghost) {
+            this.camera = new Camera({x:0,y:0})
+            this.camera.follow(this.sprite)
+        }
     }
     /**
      * Set Player Posiotion to x, y.

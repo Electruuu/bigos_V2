@@ -35,15 +35,17 @@ export default class db {
      * -1 - Complted Adding New Player Unsuccsessfully Due to Already Existing Player with given ID.
      * 0 - Completed Adding New Player With Given ID.
      * 1 - Added New Player With ID from Reservations. 
-     * @param {int} id - Player's Id to Be Set.
+     * @param {int} id - Player's ID to Be Set.
+     * @param {int} x - Player's ID to Be Set.
+     * @param {int} y - Player's ID to Be Set.
      * @returns Exit Code.
      */
-    addPlayer(id) {
+    addPlayer(id, x, y) {
         if (this.reservations.includes(id)) {
             this.players[this.players.length] = {
                 id:id,
                 data:{
-                    pos:{x:NaN,y:NaN},
+                    pos:{x:x,y:y},
                     Hp:5,
                     spd: 1,
                     add: '...'
@@ -62,7 +64,7 @@ export default class db {
             this.players[this.players.length] = {
                 id:id,
                 data:{
-                    pos:{x:NaN,y:NaN},
+                    pos:{x:x,y:y},
                     Hp:5,
                     spd: 1,
                     add: '...'
@@ -72,7 +74,7 @@ export default class db {
             this.players[this.players.length] = {
                 id:this.nextID(),
                 data:{
-                    pos:{x:NaN,y:NaN},
+                    pos:{x:x,y:y},
                     Hp: 5,
                     spd: 1,
                     add: '...'
