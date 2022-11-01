@@ -49,14 +49,10 @@ socket.addEventListener('message', (event) => {
     switch (msg.type) {
         case 'radply':
             console.log(playerLog, msg.params)
-            for (let i in playerLog) {
-                if (playerLog[i].me.id==msg.params.id) {
-                    console.log('widmo istnieje D:')
-                    return -1
-                }
+            if (compareIDs(playerLog, [msg.params.id])) {
+                console.log('dodawanie widma')
+                playerLog[playerLog.length] = new Ghost(msg.params.id, socket, 0, 0)
             }
-            console.log('dodawanie widma')
-            playerLog[playerLog.length] = new Ghost(msg.params.id, socket, 0, 0)
             break;
         case 'rgetply':
             console.log(playerLog, msg.params)
@@ -70,6 +66,22 @@ socket.addEventListener('message', (event) => {
             }
     }
 });
+/**
+ * Compares Set of Players with Set of IDs. 
+ * @param {*} playerSet1 - Array of Player/Ghost Objects 
+ * @param {*} IDList - Array with IDs.
+ * @returns Is Any ID in any of Those Set Matching.
+ */
+function compareIDs(playerSet1, IDList) {
+    for (let i in playerSet1) {
+        for (let j in IDList) {
+            if (playerSet1[i].me.id==IDList[j]) {
+                return false
+            }
+        }
+    }
+    return true
+}
 
 
 
