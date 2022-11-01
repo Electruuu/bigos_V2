@@ -1,4 +1,4 @@
-export default function incoming (msg, ws) {
+export default function incoming (msg, ws, wss) {
     msg = JSON.parse(msg.toString())
     console.log(msg)
     switch(msg.type) {
@@ -31,14 +31,16 @@ export default function incoming (msg, ws) {
             break
         case 'adply':
             if (global.data.addPlayer(msg.params.id, msg.params.pos.x, msg.params.pos.y) != -1) {
-                ws.send(JSON.stringify({
-                    type:'radply',
-                    params:{
-                        id:msg.params.id,
-                        pos:{x:msg.params.pos.x,y:msg.params.pos.y}
-                    }
-                }))
-                console.log('uwu')
+                for (let i in wss) {
+                    wss[i].send(JSON.stringify({
+                        type:'radply',
+                        params:{
+                            id:msg.params.id,
+                            pos:{x:msg.params.pos.x,y:msg.params.pos.y}
+                        }
+                    }))
+                    console.log('uwu')
+                }
             }
             break
         case 'getply':

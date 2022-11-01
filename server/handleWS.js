@@ -7,8 +7,11 @@ export default function handleWS() {
     const wss = new WebSocketServer({port: config.prod.ws})
 
     global.data = new db()
+    let wsConections = []
     
     wss.on('connection', (ws) => {
+
+        wsConections[wsConections.length] = ws
 
         console.log("Connection established");
         //console.log(wss.clients)
@@ -17,7 +20,7 @@ export default function handleWS() {
      
         // addHeartBeat()
 
-        ws.on('message', (msg) => {incoming(msg, ws)})
+        ws.on('message', (msg) => {incoming(msg, ws, wsConections)})
         
     })
 }

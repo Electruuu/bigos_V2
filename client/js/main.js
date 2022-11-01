@@ -51,7 +51,7 @@ socket.addEventListener('message', (event) => {
             console.log(playerLog, msg.params)
             if (compareIDs(playerLog, [msg.params.id])) {
                 console.log('dodawanie widma')
-                playerLog[playerLog.length] = new Ghost(msg.params.id, socket, 0, 0)
+                playerLog[playerLog.length] = new Ghost(msg.params.id, socket, msg.params.pos.x, msg.params.pos.y)
             }
             break;
         case 'rgetply':
