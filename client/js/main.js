@@ -7,7 +7,6 @@ import Ghost from "./classes/ghost.js";
 initCanvas()
 
 const socket = new WebSocket('ws://localhost:8081');
-// Listen for messages
 
 var playerLog = []
 

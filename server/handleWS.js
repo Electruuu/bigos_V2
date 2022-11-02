@@ -6,7 +6,7 @@ import incoming from './incoming.js'
 export default function handleWS() {
     const wss = new WebSocketServer({port: config.prod.ws})
 
-    global.data = new db()
+    global.data = new db({})
     let wsConections = []
     
     wss.on('connection', (ws) => {

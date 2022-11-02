@@ -3,31 +3,46 @@ export default class db {
      * Creates Class to Store Data.
      * @param {*} plys - Optional Player Data. Recomended not to Change It. 
      * @param {*} resv - Optional Reservations Data. Recomended not to Change It.
+     * @param {*} prjc - Optional Projectile Data. Recomended not to Change It.
      */
-    constructor(plys=[],resv=[]) {
-        this.players = plys;
+    constructor(params) {
+        /* Player Data Structure:
+        [
+            {
+                id:'id', // duh 
+                data:{
+                    pos:{x:'x',y:'y'}, // Players Position
+                    hp:'hp', // Amout of Player's Hp
+                    spd: 'spd', // The Speed That Player Posses 
+                    add:'itd' // Addtionals (Basicly "To Be Continued")
+                }
+            },
+            {...} // More Players
+        ]*/
+        /* Projectile Data Structure
+        [
+            {
+                type: 'type' // Later Feature Potential. Exrpres which Type of Bullet It is. 
+                data:{
+                    ex: {a:'a',b:'b'}, // Linear Expression
+                    x0: 'x0' // Starting Point of Function
+                    x: '>>' // Current Position of Projectile
+                }
+            }
+        ]*/
+        this.players = params.plys || [];
         this.defplayer = {
             id:-1,
             data:{
                 pos:{x:-1, y:-1},
                 hp:-1,
                 spd: 0,
+                agl: 0,
                 add:'...'
             }
         }
-        this.reservations = resv;
-        /* Player Data Structure:
-        [
-            {
-                id:'nazwa/id',
-                data:{
-                    {x:'x',y:'y'},
-                    hp:'hp',
-                    add:'itd'
-                }
-            },
-            {...}
-        ]*/
+        this.reservations = params.resv || [];
+        this.projectiles = params.prjc || [];
     }
     /**
      * Add Player Data with Given ID
@@ -40,33 +55,35 @@ export default class db {
      * @param {int} y - Player's ID to Be Set.
      * @returns Exit Code.
      */
-    addPlayer(id, x, y) {
-        if (this.reservations.includes(id)) {
+    addPlayer(params) {
+        if (this.reservations.includes(params.id)) {
             this.players[this.players.length] = {
-                id:id,
+                id:params.id,
                 data:{
-                    pos:{x:x,y:y},
+                    pos:{x:params.x || 0, y:params.y || 0},
                     Hp:5,
                     spd: 1,
+                    agl: 0, 
                     add: '...'
                 }
             };
-            this.reservations.splice(this.reservations.indexOf(id),1)
+            this.reservations.splice(this.reservations.indexOf(params.id),1)
             return 1;
         }
-        if (id!=-1) {
+        if (params.id!=-1) {
             for (let i in this.players) {
-                if(this.players[i].id==id) {
+                if(this.players[i].id==params.id) {
                     console.log("taki gracz istnieje")
                     return -1;
                 }
             }
             this.players[this.players.length] = {
-                id:id,
+                id:params.id,
                 data:{
-                    pos:{x:x,y:y},
+                    pos:{x:params.x || 0, y:params.y || 0},
                     Hp:5,
                     spd: 1,
+                    agl:0,
                     add: '...'
                 }
             };
@@ -74,14 +91,18 @@ export default class db {
             this.players[this.players.length] = {
                 id:this.nextID(),
                 data:{
-                    pos:{x:x,y:y},
+                    pos:{x:params.x || 0, y:params.y || 0},
                     Hp: 5,
                     spd: 1,
+                    agl:0,
                     add: '...'
                 }
             };
         }
         return 0;
+    }
+    addProjectile() {
+
     }
     /**
      * Returns Next avalible ID. 

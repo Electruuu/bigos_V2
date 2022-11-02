@@ -3,7 +3,10 @@ import Object from "./object.js";
 export default class Sprite extends Object {
     /**
      * Rysuje teksturę
-     * @param {*} params - x, y, textures
+     * @param {*} x - X Position of Sprite.
+     * @param {*} y - Y Position of Sprite.
+     * @param {*} textures - Textures to Load.
+     * @param {*} blt - Should Render Be Projectile Based.
      */
     constructor (params) {
         //przekazuje parametry do klasy rodzica (Object)
@@ -13,7 +16,7 @@ export default class Sprite extends Object {
         params.textures && this.#loadTextures(params.textures)
 
         //nasłuchuje na custom event drawTick żeby wiedzieć kiedy narysować obraz (wykona, tylko jeśli tekstury się wczytały)
-        document.addEventListener('drawTick', () => {this.draw()})
+        document.addEventListener('drawTick', () => {this.draw({blt:params.blt||false})})
     }
 
     #loadTextures(textures) {
@@ -32,8 +35,12 @@ export default class Sprite extends Object {
     removeTexture(id) {
         this.textures.splice(id, 1)
     }
-
-    draw() {
+    /**
+     * Draws a Sprite
+     * @param {*} blt - Type of Drawing (normal or projectile)   
+     */
+    draw(params) {
+        let x = params.x
         //w main.js przypisałem canvas i ctx do window, które jest globalne.
         window.ctx.save()
         window.ctx.translate(
@@ -44,7 +51,7 @@ export default class Sprite extends Object {
         for (let i in this.textures) {
             window.ctx.drawImage(
                 this.textures[i], 
-                -16, 
+                -16 + (params.blt ? (x += this.spd) : 0), 
                 -16
             )
         }
