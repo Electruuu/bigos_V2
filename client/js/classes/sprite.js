@@ -35,12 +35,19 @@ export default class Sprite extends Object {
 
     draw() {
         //w main.js przypisałem canvas i ctx do window, które jest globalne.
+        window.ctx.save()
+        window.ctx.translate(
+            this.x-(window.camera.x*window.canvas.width/100)-32, 
+            this.y-(window.camera.y*window.canvas.height/100)-32
+        )
+        window.ctx.rotate(this.angle)
         for (let i in this.textures) {
             window.ctx.drawImage(
                 this.textures[i], 
-                this.x-(window.camera.x*window.canvas.width/100), 
-                this.y-(window.camera.y*window.canvas.height/100)
+                -16, 
+                -16
             )
         }
+        window.ctx.restore()
     }
 }

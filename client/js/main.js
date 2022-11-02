@@ -27,13 +27,9 @@ socket.addEventListener('open', (event) => {
     //let widmo1 = new Ghost(4,socket,20,20)
 
     socket.send(JSON.stringify({type:"test",params:'Hello Server!'}));
-    /*
-    let camera = new Camera({x: 0, y: 0})
-
-    let player2 = new Sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png','Player_Face_32x32.png']})
-
-    camera.follow(player2)
-    */
+    
+    let player2 = new Sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png'], angle: 0})
+    
     document.addEventListener('drawTick', () => {
         //console.log(`pl: ${player2.x}/${player2.y}, cam: ${window.camera.x}/${window.camera.y}`)
 
