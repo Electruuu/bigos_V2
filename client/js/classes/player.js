@@ -1,5 +1,6 @@
 import Sprite from "./sprite.js"
 import Camera from "./camera.js";
+import Inputs from "../KeyInputs.js";
 
 export default class Player {
     /**
@@ -9,8 +10,14 @@ export default class Player {
      * @param {*} x - Player Position X. Default: 0
      * @param {*} y - Player Position Y. Default: 0 
      * @param {boolean} ghost - Advised Not to Change, Determines Whether It is Player or After-Image.
+     * @param {Document} doc - Document to attach Input Listeners to.
      */
-    constructor(id=-1, socket=0, x=0, y=0, ghost=false) {
+    constructor(params) {
+        let id = params.id 
+        let socket = params.socket || 0
+        let x = params.x || 0
+        let y = params.y || 0
+        let ghost = params.ghost || false
         const cThis = this
         this.tid = 0;
         let temp = new Date()
@@ -44,6 +51,10 @@ export default class Player {
                 add:'...'
             }
         }
+        if (!ghost) {
+            this.camera = new Camera({x:0,y:0})
+            this.camera.follow(this.sprite)
+        }
         this.sprite = new Sprite({x:this.me.data.pos.x, y:this.me.data.pos.y, textures: [
             '5Hp_Blue_32x32.png',
             'Player_Face_32x32.png',
@@ -53,10 +64,7 @@ export default class Player {
             'Player_Right_32x32.png',
             'Player_Corners_32x32.png'
         ]})
-        if (!ghost) {
-            this.camera = new Camera({x:0,y:0})
-            this.camera.follow(this.sprite)
-        }
+        this.controls = new Inputs({doc:params.doc})
     }
     /**
      * Set Player Posiotion to x, y.
@@ -79,5 +87,8 @@ export default class Player {
         this.me.data.pos.y += y
         this.sprite.setX(this.me.data.pos.x)
         this.sprite.setY(this.me.data.pos.y)
+    }
+    getMove() {
+        return this.controls.giveKey()
     }
 }

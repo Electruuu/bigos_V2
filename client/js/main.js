@@ -17,17 +17,15 @@ socket.addEventListener('open', (event) => {
         type:'getply'
     }))
 
-    let player1 = new Player(-1, socket, 15, 50)
+    let player1 = new Player({id:-1, socket:socket, x:15, y:50, doc:document})
 
     playerLog[playerLog.length] = player1
 
-    //let player2 = new Sprite({x:20,y:20,textures:['gracz.png']})
 
-    //let widmo1 = new Ghost(4,socket,20,20)
 
     socket.send(JSON.stringify({type:"test",params:'Hello Server!'}));
     
-    let player2 = new Sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png'], angle: 0})
+    //let player2 = new Sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png'], angle: 0})
     
     document.addEventListener('drawTick', () => {
         //console.log(`pl: ${player2.x}/${player2.y}, cam: ${window.camera.x}/${window.camera.y}`)
