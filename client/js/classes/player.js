@@ -1,6 +1,5 @@
 import Sprite from "./sprite.js"
 import Camera from "./camera.js";
-import Inputs from "../KeyInputs.js";
 
 export default class Player {
     /**
@@ -10,7 +9,6 @@ export default class Player {
      * @param {*} x - Player Position X. Default: 0
      * @param {*} y - Player Position Y. Default: 0 
      * @param {boolean} ghost - Advised Not to Change, Determines Whether It is Player or After-Image.
-     * @param {Document} doc - Document to attach Input Listeners to.
      */
     constructor(params) {
         let id = params.id 
@@ -54,6 +52,26 @@ export default class Player {
         if (!ghost) {
             this.camera = new Camera({x:0,y:0})
             this.camera.follow(this.sprite)
+            
+            this.dashCD = 0
+            this.lastDown = -10000
+            this.directions = []
+            document.addEventListener("keydown", (key) => {
+                let temp = new Date()
+                console.log('ouch :P', key.key, temp.getTime()%(10**4))
+                if (Math.abs(cThis.lastDown-temp.getTime()%(10**4))/100 < 2 && Math.abs(cThis.lastDown-temp.getTime()%(10**4))/100 > 0.80) {
+                    console.log('OUCH "P', Math.abs(cThis.lastDown-temp.getTime()%(10**4))/100)
+                    cThis.directions[cThis.directions.length] = "d"+key.key;
+                }
+                cThis.lastDown = temp.getTime()%(10**4)
+                cThis.directions[cThis.directions.length] = key.key
+                cThis.directions = Array.from(new Set(cThis.directions))
+                console.log(cThis.directions)
+            })
+            document.addEventListener("keyup", (key) => {
+                cThis.directions.splice(cThis.directions.findIndex((arg)=>{if (arg==key.key) {return true}}),1)
+                console.log(cThis.directions)
+            })
         }
         this.sprite = new Sprite({x:this.me.data.pos.x, y:this.me.data.pos.y, textures: [
             '5Hp_Blue_32x32.png',
@@ -64,7 +82,62 @@ export default class Player {
             'Player_Right_32x32.png',
             'Player_Corners_32x32.png'
         ]})
-        this.controls = new Inputs({doc:params.doc})
+    }
+    checkMove() {
+        this.dashCD = Math.abs(this.dashCD-1)-(this.dashCD-1)
+        for (let i in this.directions) {
+            switch (this.directions[i]) {
+                case 'w':
+                    this.move(0,this.me.data.speed)
+                    break;
+                case 's':
+                    this.move(0,-this.me.data.speed)
+                    break;
+                case 'd':
+                    this.move(this.me.data.speed, 0)
+                    break;
+                case 'a':
+                    this.move(-this.me.data.speed, 0)  
+                    break; 
+                case 'dw':
+                    if (!this.dashCD) {
+                        for (let a = 3; a>0; a=a/2-0.01) {
+                            this.move(0,cThis.me.data.speed*a)
+                        }
+                        this.dashCD = 200;
+                        this.directions.splice(cThis.directions.findIndex((arg)=>{if (arg=='dd') {return true}}),1)
+                    }
+                    break;
+                case 'ds':
+                    if (!this.dashCD) {
+                        for (let a = 3; a>0; a=a/2-0.01) {
+                            this.move(0,-cThis.me.data.speed*a)
+                        }
+                        this.dashCD = 200;
+                        this.directions.splice(cThis.directions.findIndex((arg)=>{if (arg=='dd') {return true}}),1)
+                    }
+                    break;
+                case 'dd':
+                    if (!this.dashCD) {
+                        for (let a = 3; a>0; a=a/2-0.01) {
+                            this.move(cThis.me.data.speed*a,0)
+                        }
+                        this.dashCD = 200;
+                        this.directions.splice(cThis.directions.findIndex((arg)=>{if (arg=='dd') {return true}}),1)
+                    }
+                    break;
+                case 'da':
+                    if (!this.dashCD) {
+                        for (let a = 3; a>0; a=a/2-0.01) {
+                            this.move(-cThis.me.data.speed*a,0)
+                        }
+                        this.dashCD = 200;
+                        this.directions.splice(cThis.directions.findIndex((arg)=>{if (arg=='dd') {return true}}),1)
+                    }  
+                    
+            }
+        }
+
     }
     /**
      * Set Player Posiotion to x, y.

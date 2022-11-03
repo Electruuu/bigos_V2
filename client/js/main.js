@@ -17,7 +17,9 @@ socket.addEventListener('open', (event) => {
         type:'getply'
     }))
 
-    let player1 = new Player({id:-1, socket:socket, x:15, y:50, doc:document})
+    let tlo = new Sprite({x:0,y:0,textures:['']})
+
+    let player1 = new Player({id:-1, socket:socket, x:15, y:50})
 
     playerLog[playerLog.length] = player1
 
@@ -31,6 +33,7 @@ socket.addEventListener('open', (event) => {
         //console.log(`pl: ${player2.x}/${player2.y}, cam: ${window.camera.x}/${window.camera.y}`)
 
         player1.moveTo(document.getElementById('playerX').value, 15)
+        player1.checkMove()
         //player1.moveTo(document.getElementById('playerX').value,0)
         //camera.setX(Number(document.getElementById('cameraX').value))
     })
