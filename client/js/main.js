@@ -17,22 +17,34 @@ socket.addEventListener('open', (event) => {
         type:'getply'
     }))
 
-    let tlo = new Sprite({x:0,y:0,textures:['']})
+    let tlo = new Sprite({x:0,y:0,color:'blue'})
 
     let player1 = new Player({id:-1, socket:socket, x:15, y:50})
 
     playerLog[playerLog.length] = player1
 
-
+    player1.move(0,20)
 
     socket.send(JSON.stringify({type:"test",params:'Hello Server!'}));
     
     //let player2 = new Sprite({x: 15, y: 35, textures: ['5Hp_Blue_32x32.png'], angle: 0})
     
+    //let os = (new Date()).getSeconds()
+
+    //let d
+
     document.addEventListener('drawTick', () => {
         //console.log(`pl: ${player2.x}/${player2.y}, cam: ${window.camera.x}/${window.camera.y}`)
+        //d++
+        //console.log((new Date()).getSeconds())
+        /*if (os<(new Date()).getSeconds()) {
+            console.log(d)
+            d = 0
+            os = (new Date()).getSeconds()
+        }*/
 
-        player1.moveTo(document.getElementById('playerX').value, 15)
+        //player1.moveTo(document.getElementById('playerX').value, 15)
+        //console.log(player1.sprite.getCoords())
         player1.checkMove()
         //player1.moveTo(document.getElementById('playerX').value,0)
         //camera.setX(Number(document.getElementById('cameraX').value))

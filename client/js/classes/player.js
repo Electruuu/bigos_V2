@@ -12,7 +12,7 @@ export default class Player {
      */
     constructor(params) {
         let id = params.id 
-        let socket = params.socket || 0
+        this.socket = params.socket || 0
         let x = params.x || 0
         let y = params.y || 0
         let ghost = params.ghost || false
@@ -20,14 +20,14 @@ export default class Player {
         this.tid = 0;
         let temp = new Date()
         this.tid = ((temp.getTime()-(temp.getTime()/(10**9))%2)*(10**15))%(10**8)
-        if (socket instanceof WebSocket) {
-            socket.send(JSON.stringify({type:'idver',params:{id:id, tid:this.tid}}))
+        if (this.socket instanceof WebSocket) {
+            this.socket.send(JSON.stringify({type:'idver',params:{id:id, tid:this.tid}}))
             id = -2
             function verifyID(event) {
                 let msg = JSON.parse(event.data.toString())
                 if (msg.type=='ridver' && cThis.me.id==-2 && cThis.tid == msg.params.tid) {
                     cThis.me.id = msg.params.id
-                    socket.send(JSON.stringify({
+                    cThis.socket.send(JSON.stringify({
                         type:'adply',
                         params:{
                             id:msg.params.id,
@@ -35,9 +35,8 @@ export default class Player {
                         } 
                     }))
                 }
-                socket.removeEventListener("messege", verifyID)
             }
-            socket.addEventListener("message", verifyID)
+            this.socket.addEventListener("message", verifyID)
         }
 
         this.me = {
@@ -49,6 +48,15 @@ export default class Player {
                 add:'...'
             }
         }
+        this.sprite = new Sprite({x:this.me.data.pos.x, y:this.me.data.pos.y, textures: [
+            '5Hp_Blue_32x32.png',
+            'Player_Face_32x32.png',
+            'Player_Bottom_32x32.png',
+            'Player_Up_32x32.png',
+            'Player_Left_32x32.png',
+            'Player_Right_32x32.png',
+            'Player_Corners_32x32.png'
+        ]})
         if (!ghost) {
             this.camera = new Camera({x:0,y:0})
             this.camera.follow(this.sprite)
@@ -56,6 +64,7 @@ export default class Player {
             this.dashCD = 0
             this.lastDown = -10000
             this.directions = []
+            this.clickin = false
             document.addEventListener("keydown", (key) => {
                 let temp = new Date()
                 console.log('ouch :P', key.key, temp.getTime()%(10**4))
@@ -66,73 +75,71 @@ export default class Player {
                 cThis.lastDown = temp.getTime()%(10**4)
                 cThis.directions[cThis.directions.length] = key.key
                 cThis.directions = Array.from(new Set(cThis.directions))
-                console.log(cThis.directions)
+                cThis.clickin = true
+                console.log(cThis.directions, this.me.data.pos)
             })
             document.addEventListener("keyup", (key) => {
                 cThis.directions.splice(cThis.directions.findIndex((arg)=>{if (arg==key.key) {return true}}),1)
+                cThis.clickin = false
                 console.log(cThis.directions)
             })
         }
-        this.sprite = new Sprite({x:this.me.data.pos.x, y:this.me.data.pos.y, textures: [
-            '5Hp_Blue_32x32.png',
-            'Player_Face_32x32.png',
-            'Player_Bottom_32x32.png',
-            'Player_Up_32x32.png',
-            'Player_Left_32x32.png',
-            'Player_Right_32x32.png',
-            'Player_Corners_32x32.png'
-        ]})
     }
+    /**
+     * 
+     */
     checkMove() {
         this.dashCD = Math.abs(this.dashCD-1)-(this.dashCD-1)
         for (let i in this.directions) {
             switch (this.directions[i]) {
                 case 'w':
-                    this.move(0,this.me.data.speed)
+                    this.move(0,this.me.data.speed/60)
                     break;
                 case 's':
-                    this.move(0,-this.me.data.speed)
+                    this.move(0,-this.me.data.speed/60)
                     break;
                 case 'd':
-                    this.move(this.me.data.speed, 0)
+                    this.move(this.me.data.speed/60, 0)
                     break;
                 case 'a':
-                    this.move(-this.me.data.speed, 0)  
+                    this.move(-this.me.data.speed/60, 0)  
                     break; 
                 case 'dw':
                     if (!this.dashCD) {
                         for (let a = 3; a>0; a=a/2-0.01) {
-                            this.move(0,cThis.me.data.speed*a)
+                            this.move(0,this.me.data.speed*a)
+                            this.dashCD = 2*(10**10);
+
                         }
-                        this.dashCD = 200;
-                        this.directions.splice(cThis.directions.findIndex((arg)=>{if (arg=='dd') {return true}}),1)
+                        this.directions.splice(this.directions.findIndex((arg)=>{if (arg=='dw') {return true}}),1)
                     }
                     break;
                 case 'ds':
                     if (!this.dashCD) {
                         for (let a = 3; a>0; a=a/2-0.01) {
-                            this.move(0,-cThis.me.data.speed*a)
+                            this.move(0,-this.me.data.speed*a)
+                            this.dashCD = 2*(10**10);
                         }
-                        this.dashCD = 200;
-                        this.directions.splice(cThis.directions.findIndex((arg)=>{if (arg=='dd') {return true}}),1)
+                        this.directions.splice(this.directions.findIndex((arg)=>{if (arg=='ds') {return true}}),1)
                     }
                     break;
                 case 'dd':
                     if (!this.dashCD) {
                         for (let a = 3; a>0; a=a/2-0.01) {
-                            this.move(cThis.me.data.speed*a,0)
+                            this.move(this.me.data.speed*a,0)
+                            this.dashCD = 2*(10**10);
                         }
-                        this.dashCD = 200;
-                        this.directions.splice(cThis.directions.findIndex((arg)=>{if (arg=='dd') {return true}}),1)
+                        this.directions.splice(this.directions.findIndex((arg)=>{if (arg=='dd') {return true}}),1)
                     }
                     break;
                 case 'da':
                     if (!this.dashCD) {
-                        for (let a = 3; a>0; a=a/2-0.01) {
-                            this.move(-cThis.me.data.speed*a,0)
+                        for (let i = -2.2; i<2.5; i+=0.1) {
+                            let meth = (-1*(-1*(1/2*i)+0.5)**2+3)**(-i+(3**(1/2)/10))-0.12
+                            this.move(-this.me.data.speed*meth/10,0)
+                            this.dashCD = 2*(10**10);
                         }
-                        this.dashCD = 200;
-                        this.directions.splice(cThis.directions.findIndex((arg)=>{if (arg=='dd') {return true}}),1)
+                        this.directions.splice(this.directions.findIndex((arg)=>{if (arg=='da') {return true}}),1)
                     }  
                     
             }
@@ -149,6 +156,12 @@ export default class Player {
         this.me.data.pos.y = y
         this.sprite.setX(this.me.data.pos.x)
         this.sprite.setY(this.me.data.pos.y)
+        this.socket.send(JSON.stringify({
+            type: 'move',
+            params: {
+                pos: {x: this.me.data.pos.x, y: this.me.data.pos.y}
+            }
+        }))
     }
     /**
      * Move Player Posiotion by x, y.
@@ -160,8 +173,6 @@ export default class Player {
         this.me.data.pos.y += y
         this.sprite.setX(this.me.data.pos.x)
         this.sprite.setY(this.me.data.pos.y)
-    }
-    getMove() {
-        return this.controls.giveKey()
+        
     }
 }
