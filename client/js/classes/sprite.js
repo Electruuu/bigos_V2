@@ -7,6 +7,7 @@ export default class Sprite extends Object {
      * @param {*} y - Y Position of Sprite.
      * @param {*} textures - Textures to Load.
      * @param {*} blt - Should Render Be Projectile Based.
+     * @param {*} alpha - Opacity.
      */
     constructor (params) {
         //przekazuje parametry do klasy rodzica (Object)
@@ -14,6 +15,8 @@ export default class Sprite extends Object {
         
         //wczytuje tekstury, tylko jeśli jakieś zostały podane
         params.textures && this.#loadTextures(params.textures)
+
+        this.alpha = params.alpha !== undefined ? params.alpha : 1;
 
         //nasłuchuje na custom event drawTick żeby wiedzieć kiedy narysować obraz (wykona, tylko jeśli tekstury się wczytały)
         document.addEventListener('drawTick', () => {this.draw({blt:params.blt||false})})
@@ -35,6 +38,12 @@ export default class Sprite extends Object {
     removeTexture(id) {
         this.textures.splice(id, 1)
     }
+    setAlpha(alpha) {
+        this.alpha = alpha
+    }
+    getAlpha() {
+        return this.alpha
+    }
     /**
      * Draws a Sprite
      * @param {*} blt - Type of Drawing (normal or projectile)   
@@ -48,6 +57,7 @@ export default class Sprite extends Object {
             this.y-(window.camera.y*window.canvas.height/100)-32
         )
         window.ctx.rotate(this.angle)
+        window.ctx.globalAlpha = this.alpha
         for (let i in this.textures) {
             window.ctx.drawImage(
                 this.textures[i], 
