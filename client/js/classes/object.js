@@ -3,7 +3,8 @@ export default class Object {
         this.x = window.canvas.width*params.x/100 || 0
         this.y = window.canvas.width*params.y/100 || 0
         this.angle = params.angle*Math.PI/180 || 0
-        this.scale = window.canvas.width*params.scale/1000 || window.canvas.width*1/1000
+        this.scaleSize = 354*2 // constant for scaling system // Current system coord step: 5
+        this.scale = window.canvas.width*params.scale/this.scaleSize || window.canvas.width*1/this.scaleSize
     }
     setCoords(x,y) {
         this.x = window.canvas.width*x/100
@@ -28,9 +29,9 @@ export default class Object {
         }
     }
     setScale(scale) {
-        this.scale = window.canvas.width*scale/1000
+        this.scale = window.canvas.width*scale/this.scaleSize
     }
     getScale() {
-        return this.scale/window.canvas.width*1000
+        return this.scale/window.canvas.width*this.scaleSize
     }
 }
