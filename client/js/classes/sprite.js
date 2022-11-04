@@ -56,6 +56,7 @@ export default class Sprite extends Object {
             this.x-(window.camera.x*window.canvas.width/100)-32, 
             this.y-(window.camera.y*window.canvas.height/100)-32
         )
+        window.ctx.scale(this.scale, this.scale)
         window.ctx.rotate(this.angle)
         window.ctx.globalAlpha = this.alpha
         for (let i in this.textures) {

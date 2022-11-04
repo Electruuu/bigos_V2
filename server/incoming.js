@@ -43,6 +43,15 @@ export default function incoming (msg, ws, wss) {
                 }
             }
             break
+        case 'jnlob':
+
+            break
+        case 'getlob':
+            ws.send(JSON.stringify({
+                type:'rgetlob',
+                params:global.data.lobbies
+            }))
+            break
         case 'getply':
             ws.send(JSON.stringify({
                 type:'rgetply',

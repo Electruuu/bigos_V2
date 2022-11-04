@@ -4,6 +4,7 @@ export default class db {
      * @param {*} plys - Optional Player Data. Recomended not to Change It. 
      * @param {*} resv - Optional Reservations Data. Recomended not to Change It.
      * @param {*} prjc - Optional Projectile Data. Recomended not to Change It.
+     * @param {*} lobs - Optional Lobby Data. Recomended not to Change It.
      */
     constructor(params) {
         /* Player Data Structure:
@@ -19,6 +20,18 @@ export default class db {
             },
             {...} // More Players
         ]*/
+        /* Lobby Data Structure:
+        [
+            {
+                id:'name', // Name of the lobby
+                data:{
+                    players: [id, id, id], // Id's of the players
+                    map: 'mapname', // Name of the map (mostly for information before joining)
+                    size: 4 // Amount of players
+                }
+            }
+        ]
+        */
         /* Projectile Data Structure
         [
             {
@@ -43,6 +56,11 @@ export default class db {
         }
         this.reservations = params.resv || [];
         this.projectiles = params.prjc || [];
+        this.lobbies = params.lobs || [];
+
+        this.createLobby({
+           name: 'default', 
+        })
     }
     /**
      * Add Player Data with Given ID
@@ -144,5 +162,31 @@ export default class db {
             return 0;
         }
         return -1;
+    }
+    /**
+     * Creates new lobby.
+     * Exit Codes:
+     * 0 - Lobby Creation Successfull.
+     * -1 - Lobby Creation Unsuccessfull.
+     * @param {*} name - Name of the lobby. 
+     * @param {*} map - Name of the map. If left blank, map name = default.
+     * @param {*} size - Size of the lobby (max players).
+     * @returns Exit Code.
+     */
+    createLobby(params) {
+        for (let i in this.lobbies) {
+            if (this.lobbies[i].name == params.name) {
+                return -1;
+            }
+        }
+        this.lobbies[this.lobbies.length] = {
+            id: params.name,
+            data: {
+                players: [],
+                map: params.map || 'default',
+                size: params.size || 4
+            }
+        }
+        return 0;
     }
 }

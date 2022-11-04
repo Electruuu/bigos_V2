@@ -6,6 +6,7 @@ export default class Player {
      * Class Player Extending Class db and Class sprite.
      * @param {*} id - Player's ID. Default: -1(new ID)
      * @param {WebSocket} socket - WebSocket to Verify is the ID Correct. (Optional).
+     * @param {MapManager} mapManager - MapManager.
      * @param {*} x - Player Position X. Default: 0
      * @param {*} y - Player Position Y. Default: 0 
      * @param {boolean} ghost - Advised Not to Change, Determines Whether It is Player or After-Image.
@@ -13,6 +14,7 @@ export default class Player {
     constructor(params) {
         let id = params.id 
         this.socket = params.socket || 0
+        this.mapManager = params.mapManager
         let x = params.x || 0
         let y = params.y || 0
         let ghost = params.ghost || false
@@ -22,6 +24,7 @@ export default class Player {
         this.tid = ((temp.getTime()-(temp.getTime()/(10**9))%2)*(10**15))%(10**8)
         if (this.socket instanceof WebSocket) {
             this.socket.send(JSON.stringify({type:'idver',params:{id:id, tid:this.tid}}))
+            this.socket.send(JSON.stringify({type:'getlob'}))
             id = -2
             function verifyID(event) {
                 let msg = JSON.parse(event.data.toString())
@@ -34,6 +37,26 @@ export default class Player {
                             pos:{x:x,y:y}
                         } 
                     }))
+                }
+                else if (msg.type=='rgetlob') {
+                    if (!ghost) {
+
+                        console.log(msg.params)
+
+                        cThis.mapManager.loadMap(
+                            [
+                                {
+                                    type:'wall', 
+                                    x:[
+                                        1,2.818,4.636,6.454,8.272,10.09
+                                    ], 
+                                    y:[
+                                        10,10,10,10,10,11
+                                    ]
+                                }
+                            ]
+                        )
+                    }
                 }
             }
             this.socket.addEventListener("message", verifyID)

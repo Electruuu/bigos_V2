@@ -4,6 +4,7 @@ import frameLoop from "./frameLoop.js"
 import initCanvas from "./initCanvas.js"
 import Player from "./classes/player.js"
 import Ghost from "./classes/ghost.js";
+import MapManager from "./classes/mapManager.js";
 initCanvas()
 
 const socket = new WebSocket('ws://localhost:8081');
@@ -16,10 +17,12 @@ socket.addEventListener('open', (event) => {
     socket.send(JSON.stringify({
         type:'getply'
     }))
+    
+    let mapManager = new MapManager()
 
     let tlo = new Sprite({x:0,y:0,color:'blue'})
 
-    let player1 = new Player({id:-1, socket:socket, x:15, y:50})
+    let player1 = new Player({id:-1, socket:socket, x:15, y:50, mapManager: mapManager})
 
     playerLog[playerLog.length] = player1
 
@@ -43,11 +46,7 @@ socket.addEventListener('open', (event) => {
             os = (new Date()).getSeconds()
         }*/
 
-        //player1.moveTo(document.getElementById('playerX').value, 15)
-        //console.log(player1.sprite.getCoords())
         player1.checkMove()
-        //player1.moveTo(document.getElementById('playerX').value,0)
-        //camera.setX(Number(document.getElementById('cameraX').value))
     })
 });
 
