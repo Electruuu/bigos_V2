@@ -44,17 +44,7 @@ export default class Player {
                         console.log(msg.params)
 
                         cThis.mapManager.loadMap(
-                            [
-                                {
-                                    type:'wall', 
-                                    x:[
-                                        1,10,
-                                    ], 
-                                    y:[
-                                        10,10,
-                                    ]
-                                }
-                            ]
+                            [{"type":"wall","x":[15,20,25,32.5,30,32.5,30,25,15,20,22.5,27.5,17.5,37.5,35],"y":[30,30,30,30,30,32.5,32.5,32.5,32.5,32.5,30,30,30,30,30]}]
                         )
                     }
                 }
@@ -116,10 +106,10 @@ export default class Player {
         for (let i in this.directions) {
             switch (this.directions[i]) {
                 case 'w':
-                    this.move(0,this.me.data.speed/60)
+                    this.move(0,-this.me.data.speed/60)
                     break;
                 case 's':
-                    this.move(0,-this.me.data.speed/60)
+                    this.move(0,this.me.data.speed/60)
                     break;
                 case 'd':
                     this.move(this.me.data.speed/60, 0)
@@ -130,7 +120,7 @@ export default class Player {
                 case 'dw':
                     if (!this.dashCD) {
                         for (let a = 3; a>0; a=a/2-0.01) {
-                            this.move(0,this.me.data.speed*a)
+                            this.move(0,-this.me.data.speed*a)
                             this.dashCD = 2*(10**10);
 
                         }
@@ -140,7 +130,7 @@ export default class Player {
                 case 'ds':
                     if (!this.dashCD) {
                         for (let a = 3; a>0; a=a/2-0.01) {
-                            this.move(0,-this.me.data.speed*a)
+                            this.move(0,this.me.data.speed*a)
                             this.dashCD = 2*(10**10);
                         }
                         this.directions.splice(this.directions.findIndex((arg)=>{if (arg=='ds') {return true}}),1)

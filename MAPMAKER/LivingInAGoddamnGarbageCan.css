@@ -1,0 +1,27 @@
+#inpform {
+    border: 2px outset blue;
+    height: 100%;
+    width: 25%;
+}
+#inpMatr {
+    height: 100%;
+    width: 75%;
+    border: 2px inset orange;
+    padding:0px;
+    /*flex-wrap:wrap;*/
+    display: flex;
+    overflow: scroll;
+    
+}
+.clickbox {
+    border: 1px solid red;
+    box-sizing: border-box;
+}
+html {
+    width: 100%;
+    height: 98%;
+}
+body {
+    height: 100%;
+    display: flex;
+}
