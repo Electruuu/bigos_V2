@@ -96,6 +96,7 @@ export default class Player {
                 cThis.clickin = false
                 console.log(cThis.directions)
             })
+            document.addEventListener("click", (pos) => {console.log(pos)})
         }
     }
     /**

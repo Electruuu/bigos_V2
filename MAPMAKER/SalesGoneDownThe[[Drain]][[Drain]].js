@@ -26,8 +26,8 @@ function generateMatrix() {
     function changeCell(event) {
         let cords = event.target.id
         console.log(cords%matrixSize.value, parseInt(cords/matrixSize.value))
-        let xt = parseInt(cords/matrixSize.value)*2.5
-        let yt = (cords%matrixSize.value)*2.5
+        let xt = parseInt(cords/matrixSize.value)*document.forms.uwu.factor.value
+        let yt = (cords%matrixSize.value)*document.forms.uwu.factor.value
         for (let i in map[0].x) {
             if (xt == map[0].x[i] && yt == map[0].y[0]) {
                 map[0].x.splice(i,1)

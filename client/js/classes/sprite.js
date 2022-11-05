@@ -17,6 +17,7 @@ export default class Sprite extends Object {
         params.textures && this.#loadTextures(params.textures)
 
         this.alpha = params.alpha !== undefined ? params.alpha : 1;
+        this.angle = params.angle !== undefined ? params.angle : 0;
 
         //nasłuchuje na custom event drawTick żeby wiedzieć kiedy narysować obraz (wykona, tylko jeśli tekstury się wczytały)
         document.addEventListener('drawTick', () => {this.draw({blt:params.blt||false})})
@@ -62,7 +63,7 @@ export default class Sprite extends Object {
         for (let i in this.textures) {
             window.ctx.drawImage(
                 this.textures[i], 
-                -16 + (params.blt ? (x += this.spd) : 0), 
+                -16+x, 
                 -16
             )
         }
