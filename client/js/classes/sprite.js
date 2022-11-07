@@ -50,7 +50,7 @@ export default class Sprite extends Object {
      * @param {*} blt - Type of Drawing (normal or projectile)   
      */
     draw(params) {
-        let x = params.x
+        let x = params.x || 0
         //w main.js przypisałem canvas i ctx do window, które jest globalne.
         window.ctx.save()
         window.ctx.translate(
