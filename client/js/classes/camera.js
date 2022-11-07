@@ -13,8 +13,8 @@ export default class Camera {
     }
     draw() {
         if (window.camera.following) {
-            window.camera.x = window.camera.following.getCoords().x-50
-            window.camera.y = window.camera.following.getCoords().y-50
+            window.camera.x = window.camera.following.getCoords().x*window.canvas.width/window.canvas.height-50
+            window.camera.y = window.camera.following.getCoords().y*window.canvas.width/window.canvas.height-50
         }
     }
     setCoords(x,y) {

@@ -96,7 +96,9 @@ export default class Player {
                 cThis.clickin = false
                 console.log(cThis.directions)
             })
-            document.addEventListener("click", (pos) => {console.log(pos)})
+            document.addEventListener("click", (pos) => {
+                console.log(pos)
+            })
         }
     }
     /**
@@ -176,6 +178,7 @@ export default class Player {
                 pos: {x: this.me.data.pos.x, y: this.me.data.pos.y}
             }
         }))
+        console.log(this.camera.camera.x)
     }
     /**
      * Move Player Posiotion by x, y.
@@ -187,6 +190,6 @@ export default class Player {
         this.me.data.pos.y += y
         this.sprite.setX(this.me.data.pos.x)
         this.sprite.setY(this.me.data.pos.y)
-        
+        console.log(this.camera.window.camera.x)
     }
 }
