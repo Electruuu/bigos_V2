@@ -190,6 +190,5 @@ export default class Player {
         this.me.data.pos.y += y
         this.sprite.setX(this.me.data.pos.x)
         this.sprite.setY(this.me.data.pos.y)
-        console.log(this.camera.window.camera.x)
     }
 }
