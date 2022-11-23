@@ -5,7 +5,7 @@ export default function frameLoop(timestamp) {
 
     window.ctx.clearRect(0, 0, window.canvas.width, window.canvas.height)
 
-    document.dispatchEvent(new CustomEvent('drawTick', {delta: delta}))
+    document.dispatchEvent(new CustomEvent('drawTick', {detail: {delta: delta}}))
     
     previousTimeStamp = timestamp
     window.requestAnimationFrame(frameLoop)
