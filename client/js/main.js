@@ -10,7 +10,6 @@ initCanvas()
 const socket = new WebSocket('ws://localhost:8081');
 
 var playerLog = []
-
 // Connection opened
 socket.addEventListener('open', (event) => {
 
@@ -36,7 +35,7 @@ socket.addEventListener('open', (event) => {
 
     //let d
 
-    document.addEventListener('drawTick', () => {
+    document.addEventListener('drawTick', (event) => {
         //console.log(`pl: ${player2.x}/${player2.y}, cam: ${window.camera.x}/${window.camera.y}`)
         //d++
         //console.log((new Date()).getSeconds())
@@ -45,8 +44,8 @@ socket.addEventListener('open', (event) => {
             d = 0
             os = (new Date()).getSeconds()
         }*/
-
-        player1.checkMove()
+        //console.log(event.detail.delta)
+        player1.checkMove({DeltaTime:event.detail.delta})
     })
 });
 

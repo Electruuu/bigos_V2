@@ -9,4 +9,5 @@ export default function frameLoop(timestamp) {
     
     previousTimeStamp = timestamp
     window.requestAnimationFrame(frameLoop)
+    //console.log(timestamp,previousTimeStamp,delta)
 }

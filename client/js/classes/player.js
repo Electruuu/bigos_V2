@@ -57,7 +57,7 @@ export default class Player {
             data:{
                 pos:{x:x,y:y},
                 hp:5,
-                speed: 1,
+                speed: 0.05,
                 add:'...'
             }
         }
@@ -75,6 +75,7 @@ export default class Player {
             this.camera.follow(this.sprite)
             
             this.dashCD = 0
+            this.defDashCD = 600
             this.lastDown = -10000
             this.directions = []
             this.clickin = false
@@ -102,29 +103,44 @@ export default class Player {
         }
     }
     /**
-     * 
+     * Function calling player to move themself
+     * @param {*} DeltaTime
      */
-    checkMove() {
-        this.dashCD = Math.abs(this.dashCD-1)-(this.dashCD-1)
+    checkMove(params) {
+        // |100-1| - 100-1 = 0
+        // 99 - 99 = 0
+        // |-100-1| - -100-1
+        // 101 + 99 = 200
+        // |200-1| - 200-1
+        // 199 - 199 = 0
+        if (this.dashCD) {
+            console.log(this.dashCD)
+            this.dashCD -= 1*params.DeltaTime;
+            if(this.dashCD<0) {
+                this.dashCD = 0;
+            }
+
+        } 
         for (let i in this.directions) {
             switch (this.directions[i]) {
                 case 'w':
-                    this.move(0,-this.me.data.speed/60)
+                    this.move(0,-this.me.data.speed*params.DeltaTime)
                     break;
                 case 's':
-                    this.move(0,this.me.data.speed/60)
+                    this.move(0,this.me.data.speed*params.DeltaTime)
                     break;
                 case 'd':
-                    this.move(this.me.data.speed/60, 0)
+                    this.move(this.me.data.speed*params.DeltaTime, 0)
                     break;
                 case 'a':
-                    this.move(-this.me.data.speed/60, 0)  
+                    this.move(-this.me.data.speed*params.DeltaTime, 0)  
                     break; 
-                case 'dw':
+                case 'dw': 
                     if (!this.dashCD) {
-                        for (let a = 3; a>0; a=a/2-0.01) {
-                            this.move(0,-this.me.data.speed*a)
-                            this.dashCD = 2*(10**10);
+                        for (let i = -2.2; i<2.5; i+=0.1) {
+                            let meth = (-1*(-1*(1/2*i)+0.5)**2+3)**(-i+(3**(1/2)/10))-0.12
+                            this.move(0,-this.me.data.speed*meth*params.DeltaTime/5)
+                            this.dashCD = this.defDashCD;
 
                         }
                         this.directions.splice(this.directions.findIndex((arg)=>{if (arg=='dw') {return true}}),1)
@@ -132,18 +148,20 @@ export default class Player {
                     break;
                 case 'ds':
                     if (!this.dashCD) {
-                        for (let a = 3; a>0; a=a/2-0.01) {
-                            this.move(0,this.me.data.speed*a)
-                            this.dashCD = 2*(10**10);
+                        for (let i = -2.2; i<2.5; i+=0.1) {
+                            let meth = (-1*(-1*(1/2*i)+0.5)**2+3)**(-i+(3**(1/2)/10))-0.12
+                            this.move(0,this.me.data.speed*meth*params.DeltaTime/5)
+                            this.dashCD = this.defDashCD;
                         }
                         this.directions.splice(this.directions.findIndex((arg)=>{if (arg=='ds') {return true}}),1)
                     }
                     break;
                 case 'dd':
                     if (!this.dashCD) {
-                        for (let a = 3; a>0; a=a/2-0.01) {
-                            this.move(this.me.data.speed*a,0)
-                            this.dashCD = 2*(10**10);
+                        for (let i = -2.2; i<2.5; i+=0.1) {
+                            let meth = (-1*(-1*(1/2*i)+0.5)**2+3)**(-i+(3**(1/2)/10))-0.12
+                            this.move(this.me.data.speed*meth*params.DeltaTime/5,0)
+                            this.dashCD = this.defDashCD;
                         }
                         this.directions.splice(this.directions.findIndex((arg)=>{if (arg=='dd') {return true}}),1)
                     }
@@ -152,8 +170,8 @@ export default class Player {
                     if (!this.dashCD) {
                         for (let i = -2.2; i<2.5; i+=0.1) {
                             let meth = (-1*(-1*(1/2*i)+0.5)**2+3)**(-i+(3**(1/2)/10))-0.12
-                            this.move(-this.me.data.speed*meth/10,0)
-                            this.dashCD = 2*(10**10);
+                            this.move(-this.me.data.speed*meth*params.DeltaTime/10,0)
+                            this.dashCD = this.defDashCD;
                         }
                         this.directions.splice(this.directions.findIndex((arg)=>{if (arg=='da') {return true}}),1)
                     }  

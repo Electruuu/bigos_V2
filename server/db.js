@@ -189,4 +189,20 @@ export default class db {
         }
         return 0;
     }
+    /**
+     * Adds Player to lobby
+     * Exit codes:
+     * 0 - Player Succsesfully Joined Lobby
+     * -1 - Player Didn't Join Lobby 
+     * @param {*} LobbyID - ID of Lobby that Player want to Join
+     * @param {*} PlayerId - ID of Player that wants to Join Lobby
+     * @returns Exit Codes
+     */
+    joinLobby(params) {
+        let temp
+        for (let i=0;i<this.lobbies[this.lobbies.findIndex((arg)=>{if(arg.id==params.LobbyID){return true}})];)
+        if(temp) {
+
+        }
+    }
 }
