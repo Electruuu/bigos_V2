@@ -29,7 +29,7 @@ function generateMatrix() {
         let xt = parseInt(cords/matrixSize.value)*document.forms.uwu.factor.value
         let yt = (cords%matrixSize.value)*document.forms.uwu.factor.value
         for (let i in map[0].x) {
-            if (xt == map[0].x[i] && yt == map[0].y[0]) {
+            if (xt == map[0].x[i] && yt == map[0].y[i]) {
                 map[0].x.splice(i,1)
                 map[0].y.splice(i,1)
                 event.target.style.backgroundColor = '#ff000000'
